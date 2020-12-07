@@ -1,0 +1,3 @@
+/home/inejka/CLionProjects/sem3_lab4_ppvis/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/inejka/CLionProjects/sem3_lab4_ppvis/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/inejka/CLionProjects/sem3_lab4_ppvis/cmake-build-debug/CMakeFiles/sem3_lab4_ppvis.dir

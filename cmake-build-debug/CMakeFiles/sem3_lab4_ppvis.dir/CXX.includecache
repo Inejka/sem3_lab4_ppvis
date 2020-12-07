@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/inejka/CLionProjects/sem3_lab4_ppvis/Graph.h
+iterator
+-
+
+/home/inejka/CLionProjects/sem3_lab4_ppvis/main.cpp
+iostream
+-
+Graph.h
+/home/inejka/CLionProjects/sem3_lab4_ppvis/Graph.h
+algorithm
+-
+fstream
+-
+vector
+-
+
