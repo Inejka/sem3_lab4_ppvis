@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/sem3_lab4_ppvis.dir/main.cpp.o  -o sem3_lab4_ppvis 
+/usr/bin/c++ -g CMakeFiles/sem3_lab4_ppvis.dir/main.cpp.o -o sem3_lab4_ppvis 

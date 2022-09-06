@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <fstream>
 #include <vector>
+
 using namespace std;
 
 struct fuck {
@@ -50,16 +51,31 @@ void cout_pair(std::pair<T, T> to_cout) {
     cout << to_cout.first << ' ' << to_cout.second << endl;
 }
 
+std::vector<Graph<int>::Node_iterator>  test(Graph<int> &to_work,const int &to_search){
+    std::vector<Graph<int>::Node_iterator> to_return;
+    for(auto i = to_work.begin_edge() ; i!= to_work.end_edge() ; i++){
+        if((*i).first == to_search)to_return.push_back(to_work.find((*i).second)); else
+        if((*i).second == to_search)to_return.push_back(to_work.find((*i).first));
+    }
+    return to_return;
+}
+
 int main() {
     int b;
 
     //freopen("output.txt","w",stdout);
-    Graph<huge > a;
-    for(int i = 9 ; i < 20000 ; i++)
-        a.add_node(huge(i));
-    cout << 4;
-    cin >> b;
-    a.clear();
-    cout << 4;
-    cin >> b ;
+    Graph<int> a;
+    a.add_node(1);
+    a.add_node(3);
+    a.add_node(2);
+    a.add_node(4);
+    a.add_node(6);
+    a.add_edge(1, 1);
+    a.add_edge(1, 6);
+    a.add_edge(3, 2);
+    a.add_edge(4, 1);
+    a.add_edge(6, 3);
+    //for_each(a.begin_edge(),a.end_edge(),[](auto tmp){cout_pair(tmp);});
+    for(auto &i:test(a,1))
+        cout << *i;
 }

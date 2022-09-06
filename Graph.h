@@ -6,6 +6,7 @@
 #define SEM3_LAB4_PPVIS_GRAPH_H
 
 #include <iterator>
+#include <algorithm>
 
 template<typename T>
 struct Traits {
@@ -16,7 +17,7 @@ struct Traits {
 
 template<typename node_type, typename traits=Traits<node_type>>
 class Graph {
-private:
+protected:
     typedef typename traits::arg_type arg_type;
     typedef typename traits::reference reference;
     typedef typename traits::const_reference const_reference;
@@ -105,7 +106,7 @@ public:
         auto tmp = first;
         while (tmp && !(tmp->key == to_compare))
             tmp = tmp->next;
-        if(tmp)return true; else return false;
+        if (tmp)return true; else return false;
     }
 
     bool edge_is_in(arg_type from, arg_type to) const {
@@ -259,14 +260,22 @@ public:
 
     class Edge_iterator_const : public std::iterator<std::bidirectional_iterator_tag, node_type> {
     protected:
-        Head_node *current_node, *&first, *&last;
+        Head_node *current_node, *first, *last;
         Graph<node_type> &graph;
         Arc_node *current;
     public:
-        Edge_iterator_const(Head_node *current_node, Head_node *&first, Head_node *&last, Graph<node_type> &graph,
+        Edge_iterator_const(Head_node *current_node, Head_node *first, Head_node *last, Graph<node_type> &graph,
                             Arc_node *current) : current_node(
                 current_node), first(first), last(last), graph(graph), current(current) {}
 
+
+        Edge_iterator_const &operator=(const Edge_iterator_const &rhs) {
+            if (&graph != &rhs.graph)return *this;
+            current_node = rhs.current_node;
+            first = rhs.first;
+            last = rhs.last;
+            current = rhs.current;
+        }
 
         Edge_iterator_const &operator++(int) {
             if (current && current->next)
@@ -357,7 +366,7 @@ public:
         }
     };
 
-    Edge_iterator_const begin_edge_const() {
+    Edge_iterator_const begin_edge_const() const {
         auto tmp = first;
         while (tmp && !tmp->trail)tmp = tmp->next;
         if (tmp)
@@ -366,13 +375,13 @@ public:
 
     }
 
-    Edge_iterator_const end_edge_const() {
+    Edge_iterator_const end_edge_const() const {
         return Edge_iterator_const(nullptr, first, last, *this, nullptr);
     }
 
     class Edge_iterator : public Edge_iterator_const {
     public:
-        Edge_iterator(Head_node *current_node, Head_node *&first, Head_node *&last, Graph<node_type> &graph,
+        Edge_iterator(Head_node *current_node, Head_node *first, Head_node *last, Graph<node_type> &graph,
                       Arc_node *current) : Edge_iterator_const(current_node, first, last, graph,
                                                                current) {}
 
@@ -402,7 +411,7 @@ public:
 
     class Edge_iterator_reversed : public Edge_iterator {
     public:
-        Edge_iterator_reversed(Head_node *current_node, Head_node *&first, Head_node *&last, Graph<node_type> &graph,
+        Edge_iterator_reversed(Head_node *current_node, Head_node *first, Head_node *last, Graph<node_type> &graph,
                                Arc_node *current) : Edge_iterator(current_node, first, last, graph,
                                                                   current) {}
 
@@ -443,12 +452,20 @@ public:
 
     class Node_iterator : public std::iterator<std::bidirectional_iterator_tag, node_type> {
     protected:
-        Head_node *current, *&first, *&last;
+        Head_node *current, *first, *last;
         Graph<node_type> &graph;
     public:
 
-        Node_iterator(Head_node *current, Head_node *&first, Head_node *&last, Graph<node_type> &graph) : current(
+        Node_iterator(Head_node *current, Head_node *first, Head_node *last, Graph<node_type> &graph) : current(
                 current), first(first), last(last), graph(graph) {}
+
+        Node_iterator &operator=(const Node_iterator &rhs) {
+            if (&graph != &rhs.graph)return *this;
+            first = rhs.first;
+            last = rhs.last;
+            current = rhs.current;
+        }
+
 
         Node_iterator &operator++(int) {
             if (current)
@@ -510,7 +527,7 @@ public:
         void erase() {}
 
     public:
-        Node_iterator_const(Head_node *current, Head_node *&first, Head_node *&last, Graph<node_type> &graph)
+        Node_iterator_const(Head_node *current, Head_node *first, Head_node *last, Graph<node_type> &graph)
                 : Node_iterator(current, first, last, graph) {}
 
         node_type operator*() {
@@ -518,17 +535,17 @@ public:
         }
     };
 
-    Node_iterator_const begin_const() {
+    Node_iterator_const begin_const() const {
         return Node_iterator_const(first, first, last, *this);
     }
 
-    Node_iterator_const end_const() {
+    Node_iterator_const end_const() const {
         return Node_iterator_const(nullptr, first, last, *this);
     }
 
     class Node_iterator_reversed : public Node_iterator {
     public:
-        Node_iterator_reversed(Head_node *current, Head_node *&first, Head_node *&last, Graph<node_type> &graph)
+        Node_iterator_reversed(Head_node *current, Head_node *first, Head_node *last, Graph<node_type> &graph)
                 : Node_iterator(current, first, last, graph) {}
 
         Node_iterator_reversed &operator++(int) {
@@ -558,6 +575,12 @@ public:
 
     Node_iterator_reversed end_reversed() {
         return Node_iterator_reversed(nullptr, first, last, *this);
+    }
+
+    Node_iterator find(arg_type to_find) {
+        for (auto i = begin(); i != end(); i++)
+            if (*i == to_find)return i;
+        return end();
     }
 };
 
